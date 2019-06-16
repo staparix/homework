@@ -2,6 +2,7 @@ import { Reducer } from "redux";
 import { Selector } from "reselect";
 import { ThunkAction } from "redux-thunk";
 import toaster from "toastr";
+
 import { Currency, Price } from "../domain";
 import { AppState } from "./rootReducer";
 import { fetchRates } from "../transport";
@@ -45,10 +46,10 @@ export const loadRates = (): OperationThunk => async (dispatch) => {
             rates: data.rates,
             date: data.date,
             baseCurrency: data.base,
-        }))
+        }));
     } catch (e) {
-        console.error(e);
         toaster.error("Could not load data, sorry!")
+        console.error(e);
     }
     dispatch(updateLoadingIndicatorAction(false));
 };
@@ -73,6 +74,7 @@ export const selectBaseCurrency: Selector<AppState, RatesState["baseCurrency"]> 
 export const selectRatesLastUpdate: Selector<AppState, RatesState["date"]> = (state) => state.rates.date;
 
 type Actions = UpdateRatesAction | UpdateLoadingIndicatorAction;
+
 export const ratesReducer: Reducer<RatesState, Actions> = (state = initialState, action) => {
     switch (action.type) {
         case UPDATE_RATES:
